@@ -11,7 +11,8 @@ const CategoryItem = ({ category }) => {
       onPress={() => navigation.navigate('CategoryDetails', { category })}
     >
       <Image source={{ uri: category.image }} style={styles.categoryImage} />
-      <Text style={styles.categoryName}>{category.name}</Text>
+      {/* <Text style={styles.categoryName}>{category.name}</Text> */}
+      <Text style={styles.categoryName}>{category.name || 'Nom de catégorie par défaut'}</Text>
     </TouchableOpacity>
   );
 };

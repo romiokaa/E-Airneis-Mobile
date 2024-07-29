@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
     View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity,
-    Image, Switch, Picker
+    Image, Switch
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 

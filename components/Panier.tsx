@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, TextInput } 
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
-import { Toast } from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 const baseUrl = 'https://votre-domaine.com/img/'; // Remplacez par votre URL de base
 

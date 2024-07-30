@@ -1,161 +1,276 @@
-// import React from 'react';
-// import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-// import { useRouter } from 'expo-router';
-// import styles from '../assets/css/styles';
-
-// interface Category {
-//     nom: string;
-//     images: any;
-// }
-
-// interface Products {
-//     nom: string;
-//     images: any;
-//     prix?: string;
-// }
-
-// const carrouselImages = [
-//     require('@/assets/images/carrousel.jpg'),
-//     require('@/assets/images/carrousel.jpg'),
-//     require('@/assets/images/carrousel.jpg')
-// ];
-
-// const categories: Category[] = [
-//     { nom: 'Lit', images: require('@/assets/images/temps.png')},
-//     { nom: 'Canapé', images: require('@/assets/images/temps.png')},
-//     { nom: 'Chaise', images: require('@/assets/images/temps.png')},
-//     { nom: 'Table', images: require('@/assets/images/temps.png')}
-// ];
-
-// const products: Product[] = [
-//     {nom: 'Table en marbre', prix: '500€', images: require('@/assets/images/temps.png')},
-//     {nom: 'Chaise en bois', prix: '150€', images: require('@/assets/images/temps.png')},
-//     {nom: 'Canapé en cuir', prix: '1200€', images: require('@/assets/images/temps.png')},
-//     {nom: 'Lit en bois', prix: '450€', images: require('@/assets/images/temps.png')},
-// ];
-
-// export default Home;
-
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import Carousel from 'react-native-snap-carousel'; // Utilisez une bibliothèque de carrousel compatible avec React Native
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, ActivityIndicator, FlatList, Animated, Easing } from 'react-native';
+import Modal from 'react-native-modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-// import Popup from './popUp'; // Assurez-vous que votre composant Popup est compatible avec React Native
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image'; // Pour l'optimisation des images
 
-const baseUrl = '/img/'; // Assurez-vous que l'URL de base des images est correcte pour React Native
+// Types pour les données (avec des types plus précis si possible)
+interface Category {
+  categoryId: number;
+  categoryName: string;
+  defaultPhotoUrl: string | null;
+}
 
-const Home = ({ navigation }) => {
-  const [produits, setProduits] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const defaultImage = baseUrl + 'React-JS';
+interface Product {
+  productId: number;
+  Nom: string;
+  Description: string;
+  prix: number;
+  Stock: number;
+  productPhotos: { photoUrl: string }[];
+  category: Category;
+  materiaux: any[];
+}
+
+const { width } = Dimensions.get('window');
+
+const Home = ({ navigation }: { navigation: NavigationProp<ParamListBase> }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const baseUrl = 'http://192.168.1.110:8081/assets/images/'
+  const [currentItems, setCurrentItems] = useState<Array<Category | Product>>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const opacity = useRef(new Animated.Value(0)).current; 
 
   useEffect(() => {
-    // Récupérer les données du backoffice avec axios
-    axios.get('http://localhost:8000/api/produits')
-      .then(response => {
-        setProduits(response.data);
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des produits :', error);
-      });
+    const fetchData = async () => {
+      try {
+        const [productsResponse, categoriesResponse] = await Promise.all([
+          axios.get('http://192.168.1.110:8000/api/produits'),
+          axios.get('http://192.168.1.110:8000/api/categories'),
+        ]);
+        console.log('Réponse produits:', productsResponse);
+        console.log('Réponse catégories:', categoriesResponse);
 
-    axios.get('http://localhost:8000/api/categories')
-      .then(response => {
-        setCategories(response.data);
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des catégories :', error);
-      });
+        setProducts(productsResponse.data);
+        setCategories(categoriesResponse.data);
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      setIsLoggedIn(true);
-      setShowPopup(true);
-    }
+        const user = JSON.parse(await AsyncStorage.getItem('user') || 'null');
+        if (user) {
+          setIsLoggedIn(true);
+          setShowPopup(true);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
 
-  const renderCarouselItem = ({ item }) => (
-    <View style={styles.carouselSlide}>
-      <Image source={{ uri: item.productPhotos[0] ? baseUrl + item.productPhotos[0].photoUrl : defaultImage }} style={styles.carouselImage} />
-    </View>
+  const renderProductItem = ({ item }: { item: Product }) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ProductDetails', { product: item })}
+      style={styles.productItem}
+    >
+      <Image
+
+        source={{ uri: item.productPhotos[0] ? baseUrl + item.productPhotos[0].photoUrl : 'default_image' }}
+
+        style={styles.productImage}
+        resizeMode="contain"
+        onLoadStart={() => {
+          console.log("Contenu de l'objet item :", item);
+          console.log("URL de l'image :", baseUrl + item.productPhotos[0].photoUrl); 
+          console.log("Contenu de item.productPhotos :", item.productPhotos); 
+
+        }}
+      />
+      <Text style={styles.productText}>{item.Nom}</Text>
+      <Text style={styles.productPrice}>Prix : {item.prix} €</Text>
+    </TouchableOpacity>
   );
 
+  const renderCategoryItem = ({ item }: { item: Category }) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('CategoryDetails', { category: item })}
+      style={styles.categoryItem}
+    >
+      <Image
+        source={{ uri: item.defaultPhotoUrl ? baseUrl + item.defaultPhotoUrl : 'default_image' }}
+        style={styles.categoryImage}
+        resizeMode="contain"
+      />
+      <Text style={styles.categoryText}>{item.categoryName}</Text>
+    </TouchableOpacity>
+  );
+
+  const combinedData = [...categories, ...products];
+
+  const renderItem = ({ item, index }: { item: Product | Category; index: number }) => {
+    if ('categoryName' in item) {
+      return renderCategoryItem({ item: item as Category });
+    } else {
+      return renderProductItem({ item: item as Product });
+    }
+  };
+  useEffect(() => {
+    if (currentIndex < currentItems.length) {
+      startAnimation();
+    } else if (currentIndex === 3 && products.length > 0) {
+      setCurrentItems(products.slice(0, 3));
+      setCurrentIndex(0);
+      startAnimation();
+    }
+  }, [currentIndex, currentItems]);
+
+  const startAnimation = () => {
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.linear, // Correction ici
+      useNativeDriver: true
+    }).start(() => {
+      setTimeout(() => {
+        opacity.setValue(0);
+        setCurrentIndex(currentIndex + 1);
+      }, 500);
+    });
+  };
   return (
     <ScrollView style={styles.homePage}>
-
-      {/* Carrousel */}
-      <Carousel
-        data={produits}
-        renderItem={renderCarouselItem}
-        sliderWidth={width} // Largeur du carrousel
-        itemWidth={width} // Largeur d'un élément du carrousel
-        autoplay={true}
-        autoplayInterval={5000}
-        loop={true}
-      />
-
-      {/* Popup */}
-      {showPopup && (
-        <Popup
-          message={`Bienvenue, ${JSON.parse(localStorage.getItem('user')).firstname}!`}
-          onClose={handleClosePopup}
-        />
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
       )}
 
-      {/* Slogan */}
-      <Text style={styles.slogan}>
-        VENANT DES HAUTES TERRES D'ECOSSE
-        {"\n"}
-        NOS MEUBLES SONT IMMORTELS
-      </Text>
+  
+      {!isLoading && (
+        <>
+          <Text style={styles.slogan}>
+            VENANT DES HAUTES TERRES D'ECOSSE{"\n"}
+            NOS MEUBLES SONT IMMORTELS
+          </Text>
 
-      {/* Grille des catégories */}
-      <View style={styles.categoryGrid}>
-        {categories.slice(0, 3).map((category) => (
-          <TouchableOpacity 
-            key={category.categoryId}
-            onPress={() => navigation.navigate('CategoryDetails', { category })}
-            style={styles.categoryItem}
-          >
-            <Image
-              source={{ uri: category.defaultPhotoUrl ? baseUrl + category.defaultPhotoUrl : defaultImage }}
-              style={styles.categoryImage}
-            />
-            <Text style={styles.categoryText}>{category.categoryName}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+          <FlatList
+            data={categories.slice(0, 3)}
+            renderItem={renderCategoryItem}
+            keyExtractor={(item) => item.categoryId.toString()}
+            contentContainerStyle={styles.categoryGrid} // Ajout de contentContainerStyle
+          />
 
-      {/* Les Highlanders du moment */}
-      <Text style={styles.highlandersTitle}>Les Highlanders du moment</Text>
+          <Text style={styles.slogan}>Les Highlanders du moment</Text>
 
-      {/* Grille des produits */}
-      <View style={styles.productGrid}>
-        {produits.slice(0, 3).map((produit) => (
-          <TouchableOpacity
-            key={produit.productId}
-            onPress={() => navigation.navigate('ProductDetails', { product: produit })} 
-            style={styles.productItem}
-          >
-            <Image source={{ uri: produit.productPhotos[0] ? baseUrl + produit.productPhotos[0].photoUrl : defaultImage }} style={styles.productImage} />
-            <Text style={styles.productText}>{produit.Nom}</Text>
-            <Text style={styles.productPrice}>Prix : {produit.prix} €</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+          {/* Grille des produits (limitée à 3) */}
+          <FlatList
+            data={products.slice(0, 3)}
+            renderItem={renderProductItem}
+            keyExtractor={(item) => item.productId.toString()}
+            contentContainerStyle={styles.productGrid} // Ajout de contentContainerStyle
+
+          />
+        </>
+      )}
     </ScrollView>
+
   );
 };
-
-// Styles (à personnaliser)
 const styles = StyleSheet.create({
-  // ... styles pour les éléments de la page ...
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center', // Centre verticalement le contenu
+    alignItems: 'center',   // Centre horizontalement le contenu
+  },
+  homePage: {
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popup: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+  },
+  popupText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  popupClose: {
+    color: 'blue',
+    textAlign: 'center',
+  },
+  slogan: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center', // Centre horizontalement les catégories
+  },
+  categoryItem: {
+    width: width - 40, 
+    marginBottom: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+  },
+  categoryImage: {
+    width: 80,
+    height: 80,
+    marginBottom: 10,
+  },
+  categoryText: {
+    textAlign: 'center',
+  },
+
+  highlandersTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+
+  productGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  productItem: {
+    width: width - 40, 
+    marginBottom: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    marginBottom: 10,
+  },
+  productText: {
+    textAlign: 'center',
+  },
+  productPrice: {
+    textAlign: 'center',
+    color: 'green',
+  },
+  
+
 });
 
+
 export default Home;
+

@@ -27,7 +27,7 @@ const Checkout: React.FC = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const fieldData = [
-    // ... (Données des champs)
+
   ];
 
   useEffect(() => {
@@ -77,7 +77,6 @@ const Checkout: React.FC = () => {
           if (useExistingData && data) {
             setFirstName(data.firstName || '');
             setLastName(data.lastName || '');
-            // ... (Set other fields)
           }
           setStep(2);
         } catch (error) {
@@ -92,8 +91,6 @@ const Checkout: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
@@ -118,7 +115,6 @@ const Checkout: React.FC = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
         return_url: 'http://localhost:8000/confirmation',
       },
     });
@@ -134,11 +130,7 @@ const Checkout: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        {/* ... (étape 1 : composant Login) */}
-
-        {/* ... (étape 2 : formulaire avec les champs de saisie, CardField, boutons, etc.) */}
     </ScrollView>
   );
 };
-// ... (styles)
 export default Checkout;

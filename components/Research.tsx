@@ -7,7 +7,7 @@ import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-const baseUrl = '/img/'; // Assurez-vous que cette URL est correcte pour React Native
+const baseUrl = 'http://192.168.1.110:8081/assets/images/';
 
 const RecherchePage = () => {
     const navigation = useNavigation();
@@ -135,7 +135,6 @@ const RecherchePage = () => {
 
       {showFilters && (
         <View style={styles.filterContainer}>
-          {/* ... filtres ... */}
         </View>
       )}
 
@@ -175,7 +174,6 @@ const RecherchePage = () => {
 };
 
 const styles = StyleSheet.create({
-    // ... styles ...
 });
 
 export default RecherchePage;

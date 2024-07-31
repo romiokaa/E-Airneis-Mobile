@@ -52,8 +52,6 @@ const Contact = () => {
           {serverErrors.name && <Text style={styles.errorText}>{serverErrors.name}</Text>}
         </View>
 
-        {/* ... (Autres champs de saisie : email, subject, message) */}
-
         <TouchableOpacity
           style={[styles.submitButton, isLoading && styles.disabledButton]}
           onPress={handleSubmit}
@@ -69,7 +67,6 @@ const Contact = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... vos styles ici
 });
 
 export default Contact;

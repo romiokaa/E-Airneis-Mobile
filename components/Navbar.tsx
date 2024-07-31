@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Image, Text, StyleSheet, View, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@expo/vector-icons/Ionicons'; // Ou une autre bibliothèque d'icônes
-import Menu from './Menu'; // Importez votre composant Menu
+import Ionicons from '@expo/vector-icons/Ionicons'; 
+import Menu from './Menu';
 
 const Navbar = () => {
   const navigation = useNavigation();
@@ -40,11 +40,11 @@ const Navbar = () => {
   };
 
   const handleSearchClick = () => {
-    navigation.navigate('SearchScreen'); // Remplacez par le nom de votre écran de recherche
+    navigation.navigate('SearchScreen'); 
   };
 
   const handleCartClick = () => {
-    navigation.navigate('CartScreen'); // Remplacez par le nom de votre écran de panier
+    navigation.navigate('CartScreen'); 
   };
 
   return (
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 15,
-    backgroundColor: '#f0f0f0', // Exemple de couleur de fond
+    backgroundColor: '#f0f0f0', 
   },
   logo: {
     fontSize: 24,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuButton: {
-    marginLeft: 10, // Espace entre les icônes
+    marginLeft: 10, 
   },
   cartDot: {
     width: 10,

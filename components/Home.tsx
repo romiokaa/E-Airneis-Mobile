@@ -4,9 +4,8 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import FastImage from 'react-native-fast-image'; // Pour l'optimisation des images
+import FastImage from 'react-native-fast-image'; 
 
-// Types pour les données (avec des types plus précis si possible)
 interface Category {
   categoryId: number;
   categoryName: string;
@@ -129,7 +128,7 @@ const Home = ({ navigation }: { navigation: NavigationProp<ParamListBase> }) => 
     Animated.timing(opacity, {
       toValue: 1,
       duration: 1000,
-      easing: Easing.linear, // Correction ici
+      easing: Easing.linear,
       useNativeDriver: true
     }).start(() => {
       setTimeout(() => {
@@ -158,7 +157,7 @@ const Home = ({ navigation }: { navigation: NavigationProp<ParamListBase> }) => 
             data={categories.slice(0, 3)}
             renderItem={renderCategoryItem}
             keyExtractor={(item) => item.categoryId.toString()}
-            contentContainerStyle={styles.categoryGrid} // Ajout de contentContainerStyle
+            contentContainerStyle={styles.categoryGrid} 
           />
 
           <Text style={styles.slogan}>Les Highlanders du moment</Text>
@@ -168,7 +167,7 @@ const Home = ({ navigation }: { navigation: NavigationProp<ParamListBase> }) => 
             data={products.slice(0, 3)}
             renderItem={renderProductItem}
             keyExtractor={(item) => item.productId.toString()}
-            contentContainerStyle={styles.productGrid} // Ajout de contentContainerStyle
+            contentContainerStyle={styles.productGrid} 
 
           />
         </>
@@ -180,8 +179,8 @@ const Home = ({ navigation }: { navigation: NavigationProp<ParamListBase> }) => 
 const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center', // Centre verticalement le contenu
-    alignItems: 'center',   // Centre horizontalement le contenu
+    justifyContent: 'center', 
+    alignItems: 'center',   
   },
   homePage: {
     padding: 20,
@@ -215,7 +214,7 @@ const styles = StyleSheet.create({
   categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center', // Centre horizontalement les catégories
+    justifyContent: 'center', 
   },
   categoryItem: {
     width: width - 40, 

@@ -16,7 +16,7 @@ function OrderHistory() {
 
         if (!userData || !userData.token || !userData.user || !userData.user.id) {
           console.error('User data or token is missing or invalid:', userData);
-          navigation.navigate('Login'); // Redirigez vers la page de connexion si l'utilisateur n'est pas connecté
+          navigation.navigate('Login'); 
           return;
         }
 

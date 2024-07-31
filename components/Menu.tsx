@@ -41,7 +41,6 @@ const Menu = ({ isMenuOpen, toggleMenu }) => {
         </>
       )}
 
-      {/* Autres éléments du menu */}
       <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')} style={styles.menuItem}>
         <Text style={styles.menuText}>Mes commandes</Text>
       </TouchableOpacity>
@@ -52,10 +51,10 @@ const Menu = ({ isMenuOpen, toggleMenu }) => {
 
 const styles = StyleSheet.create({
   menu: {
-    // Styles pour le menu fermé (par exemple, positionné hors de l'écran)
+
   },
   menuOpen: {
-    // Styles pour le menu ouvert (par exemple, visible à l'écran)
+
   },
   menuItem: {
     paddingVertical: 10,
@@ -64,7 +63,6 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 16,
   },
-  // ... autres styles
 });
 
 export default Menu;

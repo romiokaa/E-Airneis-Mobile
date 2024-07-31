@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons'; // Ou votre bibliothèque d'icônes préférée
-import { Linking } from 'react-native'; // Pour ouvrir les liens externes
+import Ionicons from '@expo/vector-icons/Ionicons'; 
+import { Linking } from 'react-native'; 
 
 function Footer() {
   const handleIconPress = (url: string) => {
@@ -41,22 +41,22 @@ function Footer() {
 
 const styles = StyleSheet.create({
   footer: {
-    flexDirection: 'row', // Alignez les éléments horizontalement
-    justifyContent: 'space-around', // Espacez-les uniformément
-    alignItems: 'center', // Alignez-les verticalement
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    alignItems: 'center', 
     padding: 15,
-    backgroundColor: '#f0f0f0', // Couleur de fond (exemple)
+    backgroundColor: '#f0f0f0',
   },
   textContainer: {
-    flexDirection: 'row', // Alignez les textes horizontalement
+    flexDirection: 'row', 
     alignItems: 'center',
   },
   footerText: {
     fontSize: 16,
-    color: 'blue', // Couleur du texte des liens (exemple)
+    color: 'blue', 
   },
   separator: {
-    marginHorizontal: 5, // Espace autour du séparateur
+    marginHorizontal: 5, 
   },
   icones: {
     flexDirection: 'row',

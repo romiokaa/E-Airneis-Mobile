@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel'; 
 import { ToastContainer, toast } from 'react-native-toast-message';
 
-const baseUrl = 'https://votre-domaine.com/img/'; // Remplacez par votre URL de base
+const baseUrl = 'http://192.168.1.110:8081/assets/images/';
 const { width } = Dimensions.get('window');
 
 const ProductSingle: React.FC = () => {
@@ -69,7 +69,6 @@ const ProductSingle: React.FC = () => {
           text1: 'Produit ajouté au panier !',
         });
       } else {
-        // ... (logique pour le panier invité)
       }
     } catch (error) {
       console.error('Erreur lors de l\'ajout au panier:', error);
@@ -109,7 +108,7 @@ const ProductSingle: React.FC = () => {
       {product && (
         <>
           <Carousel
-            data={product.productPhotos} // Utilisez les photos du produit pour le carrousel
+            data={product.productPhotos} 
             renderItem={renderCarouselItem}
             sliderWidth={width}
             itemWidth={width}
@@ -140,7 +139,7 @@ const ProductSingle: React.FC = () => {
             <Text style={styles.similarProductsTitle}>Produits similaires</Text>
             {similarProducts.length > 0 ? (
               <FlatList
-                data={similarProducts.slice(0, 4)} // Limite à 4 produits similaires
+                data={similarProducts.slice(0, 4)} 
                 renderItem={renderProductItem}
                 keyExtractor={(item) => item.productId.toString()}
                 horizontal
@@ -156,9 +155,7 @@ const ProductSingle: React.FC = () => {
   );
 };
 
-// Styles (à personnaliser)
 const styles = StyleSheet.create({
-  // ... vos styles ici
 });
 
 export default ProductSingle;

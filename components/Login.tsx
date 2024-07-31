@@ -72,7 +72,6 @@ const Login: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... (styles pour le container, titre, formulaire, input, etc.)
 });
 
 export default Login;

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 're
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 
-const baseUrl = 'https://localhost:8000/img/'; // Remplacez par votre URL de base
+const baseUrl = 'http://192.168.1.110:8081/assets/images/';
 
 interface OrderDetailProps {
   route: {

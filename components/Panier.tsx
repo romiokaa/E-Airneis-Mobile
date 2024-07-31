@@ -5,11 +5,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 
-const baseUrl = 'https://votre-domaine.com/img/'; // Remplacez par votre URL de base
+const baseUrl = 'http://192.168.1.110:8081/assets/images/';
 
 const Panier: React.FC = () => {
   const navigation = useNavigation();
-  const route = useRoute(); // Pour récupérer les paramètres de navigation
+  const route = useRoute(); 
 
   const [panier, setPanier] = useState([]);
   const [userId, setUserId] = useState(null);
@@ -42,7 +42,7 @@ const Panier: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const newTotalTTC = panier.reduce((total, produit) => total + produit.prix * produit.quantite, 0) * 1.2; // Calcul du total TTC
+    const newTotalTTC = panier.reduce((total, produit) => total + produit.prix * produit.quantite, 0) * 1.2; 
     setTotalTTC(newTotalTTC);
   }, [panier]);
 
@@ -96,7 +96,7 @@ const Panier: React.FC = () => {
             style={styles.quantityInput}
             value={item.quantite.toString()}
             keyboardType="numeric"
-            onChangeText={(text) => handleModifierProduit(item.productId, parseInt(text, 10) || 1)} // Validation de la quantité
+            onChangeText={(text) => handleModifierProduit(item.productId, parseInt(text, 10) || 1)} 
           />
           <TouchableOpacity onPress={() => handleModifierProduit(item.productId, item.quantite + 1)}>
             <Feather name="plus-circle" size={20} color="black" />
@@ -130,5 +130,4 @@ const Panier: React.FC = () => {
     </View>
   );
 };
-// ... (styles) 
 export default Panier;

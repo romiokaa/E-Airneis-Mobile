@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+# E-Airness-Mobile : Frontend de l'application E-commerce
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Ce projet Expo React Native constitue l'interface utilisateur (frontend) de l'application e-commerce E-Airness.
 
-## Get started
+## Démarrage
 
-1. Install dependencies
+1.  Assurez-vous d'être dans le dossier `E-Airness-Mobile`.
+2.  Installez les dépendances : `npm install` 
+3.  Lancez le serveur de développement : `npx expo start` 
 
-   ```bash
-   npm install
-   ```
+L'application devrait être accessible à l'adresse http://localhost:8081.
 
-2. Start the app
+## Fonctionnalités
 
-   ```bash
-    npx expo start
-   ```
+* **Navigation dans le catalogue :** Parcourir les produits par catégorie, filtrer et trier les résultats.
+* **Panier d'achat :** Ajouter, modifier et supprimer des articles du panier.
+* **Processus de paiement :** Passer une commande et effectuer le paiement en toute sécurité.
+* **Gestion du compte :** Créer un compte, se connecter, consulter l'historique des commandes, changer les informations utilisateur.
+* **Recherche de produit : ** Système de recherche intelligent.
+  
+## Structure des dossiers
 
-In the output, you'll find options to open the app in a
+*   **app/** : Contient le fichier principal de l'application, et les fichiers gérant le routage.
+*   **assets/images/** : Contient les images utilisées dans l'application.
+*   **components/** : Contient les composants React Native réutilisables pour l'affichage des éléments de l'interface.
+*   **package.json** : Contient les dépendances du projet et les scripts disponibles.
+*   **package-lock.json** : Verrouille les versions des dépendances pour assurer la cohérence entre les installations.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Scripts disponibles
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+*   `npx expo start` : Lance le serveur de développement.
 
-## Get a fresh project
+## Technologies utilisées
 
-When you're ready, run:
+*   Expo 
+*   React Native
 
-```bash
-npm run reset-project
-```
+## Remarques
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+*   Assurez-vous que le backend est en cours d'exécution pour que l'application fonctionne correctement.
 
-## Learn more
+## Contributeurs
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+* Tarik OUKACI
+* Maïssaâ HACHI
+* Hailé SAVADOUX
+* Mohamed-Ali OUACHANI

@@ -7,10 +7,9 @@ import { useNavigation } from '@react-navigation/native';  
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import   
- { CardField, StripeProvider } from '@stripe/stripe-react-native'; // Assurez-vous d'avoir installé cette bibliothèque
+ { CardField, StripeProvider } from '@stripe/stripe-react-native'; 
  import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Interface pour typer les données utilisateur
 interface User {
   id: number;
   email: string;
@@ -27,7 +26,6 @@ interface User {
 
 interface AppError {
     message: string;
-    // Autres propriétés éventuelles de l'erreur
   }  
 
 const AccountSettings: React.FC = () => {
@@ -38,7 +36,7 @@ const AccountSettings: React.FC = () => {
   const [apiErrors, setApiErrors] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [editing, setEditing] = useState<keyof User | null>(null);
-  const passwordFieldName: keyof User = 'password'; // Variable pour le nom du champ "password"
+  const passwordFieldName: keyof User = 'password'; 
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -75,19 +73,19 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
           `http://localhost:8000/api/account/${storedUser.user.id}`,
           data,
           {
-            headers: { Authorization: `Bearer ${storedUser.token}` }, // Correction de l'erreur "token is not defined"
+            headers: { Authorization: `Bearer ${storedUser.token}` },
           }
         );
   
         if (response.status === 200) {
           setSuccessMessage('Informations mises à jour avec succès !');
-          const updatedData: User = response.data; // Utilisez response.data directement
+          const updatedData: User = response.data; 
           setUserData(updatedData);
           reset(updatedData); 
           setEditing(null);
           await AsyncStorage.setItem('user', JSON.stringify(updatedData)); 
         } else {
-          const errorData = response.data; // Utilisez response.data directement
+          const errorData = response.data; 
           setApiErrors(errorData.error || 'Erreur lors de la mise à jour.');
         }
       }
@@ -113,18 +111,18 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
             const storedUserString = await AsyncStorage.getItem('user');
             if (storedUserString) {
               const storedUser: User = JSON.parse(storedUserString);
-              if (!storedUser || !storedUser.token || !storedUser.id) { // Correction de la vérification de storedUser.user
+              if (!storedUser || !storedUser.token || !storedUser.id) { 
                 console.error('User data or token is missing or invalid:', storedUser);
                 navigation.navigate('Login');
                 return;
               }
   
               try {
-                const response = await axios.delete(`http://localhost:8000/api/account/${storedUser.id}/${field}`, { // Correction de l'URL
+                const response = await axios.delete(`http://localhost:8000/api/account/${storedUser.id}/${field}`, { 
                   headers: { Authorization: `Bearer ${storedUser.token}` },
                 });
   
-                if (response.status !== 200) { // Vérification du code de status
+                if (response.status !== 200) { 
                   const errorData = response.data;
                   throw new Error(errorData.error || 'Erreur lors de la suppression du champ');
                 }
@@ -132,15 +130,13 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
                 setValue(field, '');
                 setSuccessMessage(`Champ ${field} supprimé avec succès !`);
   
-                // Mise à jour de userData en utilisant un type optionnel (Partial<User>)
                 const updatedUserData: Partial<User> = { ...userData };
                 delete updatedUserData[field];
 
-                if (updatedUserData.id) { // Vérifiez que l'ID est toujours présent
-                setUserData(updatedUserData as User); // Conversion en User après la suppression
+                if (updatedUserData.id) { 
+                setUserData(updatedUserData as User); 
                 await AsyncStorage.setItem('user', JSON.stringify(updatedUserData));
                 } else {
-                // Gérez le cas où l'ID est manquant (erreur inattendue)
                 console.error('ID utilisateur manquant après la suppression du champ.');
                 }
               } catch (error: any) {
@@ -161,19 +157,18 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 
   const cancelEditing = () => {
     setEditing(null);
-    if (userData) { // Vérifiez que userData n'est pas null
+    if (userData) { 
       reset(userData);
     }
   };
   
 
   const handleCardDetailsChange = (cardDetails : any) => {
-    // Gérer les détails de la carte avec Stripe
     console.log(cardDetails);
   };
 
   const handleChange = (name: keyof User, value: string) => {
-    setValue(name, value); // Mettre à jour la valeur du champ dans l'état du formulaire
+    setValue(name, value); 
   };
 
   const renderField = (fieldName: keyof User, label: string, keyboardType?: any) => {
@@ -188,7 +183,7 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
               style={styles.input}
               placeholder={label}
               {...register(fieldName, { required: true })}
-              defaultValue={userData[fieldName].toString()} // Pas besoin de ?? ici
+              defaultValue={userData[fieldName].toString()} 
               onChangeText={(text) => handleChange(fieldName, text)}
               keyboardType={keyboardType}
             />
@@ -209,8 +204,7 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         </View>
       );
     } else {
-      // userData n'est pas encore chargé ou la propriété n'existe pas
-      return null; // Ou un autre composant approprié (ex: ActivityIndicator)
+      return null; 
     }
   };
   
@@ -228,7 +222,7 @@ const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         {/* Mot de passe */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Nouveau mot de passe:</Text>
-          {typeof editing === 'string' && editing === 'password' && ( // Correction de la comparaison
+          {typeof editing === 'string' && editing === 'password' && ( 
             <>
               <TextInput
                 style={styles.input}
@@ -342,14 +336,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    width: '45%', // Pour occuper environ la moitié de la largeur
+    width: '45%', 
   },
   cancelButton: {
     backgroundColor: 'gray',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    width: '45%', // Pour occuper environ la moitié de la largeur
+    width: '45%', 
   },
   buttonText: {
     color: 'white',

@@ -3,26 +3,24 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native'; 
 
-const baseUrl = '/img/'; // Assurez-vous que cette URL est correcte pour React Native
+const baseUrl = 'http://192.168.1.110:8081/assets/images/';
 
 const CategoryPage = () => {
   const navigation = useNavigation();
-  const route = useRoute(); // Obtenez les paramètres de la route
+  const route = useRoute(); 
   const categoryId = route.params?.categoryId; 
 
   const [category, setCategory] = useState(null);
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const defaultImage = baseUrl + 'React-JS'; // Image par défaut
+  const defaultImage = baseUrl + 'React-JS'; 
 
   useEffect(() => {
     const fetchCategoryDetails = async () => {
       try {
-        // Récupérer les informations de la catégorie
         const response = await axios.get(`http://localhost:8000/api/categories/${categoryId}`);
         setCategory(response.data);
 
-        // Récupérer les produits de la catégorie
         const productsResponse = await axios.get(`http://localhost:8000/api/categories/${categoryId}/produits`);
         setCategoryProducts(productsResponse.data);
       } catch (error) {
@@ -32,11 +30,11 @@ const CategoryPage = () => {
       }
     };
     fetchCategoryDetails(); 
-  }, [categoryId]); // Exécutez l'effet à chaque fois que categoryId change
+  }, [categoryId]); 
 
   const renderProductItem = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate('ProductDetails', { product: item })} // Navigation vers le détail du produit
+      onPress={() => navigation.navigate('ProductDetails', { product: item })} 
       style={styles.productCard}
     >
       <Image 
@@ -77,7 +75,7 @@ const CategoryPage = () => {
           data={categoryProducts}
           renderItem={renderProductItem}
           keyExtractor={(item) => item.productId.toString()}
-          numColumns={2} // Grille à deux colonnes
+          numColumns={2} 
           contentContainerStyle={styles.productGrid}
         />
       )}
@@ -85,9 +83,8 @@ const CategoryPage = () => {
   );
 };
 
-// Styles (à personnaliser)
+
 const styles = StyleSheet.create({
-  // ... styles pour les éléments de la page ...
 });
 
 export default CategoryPage;

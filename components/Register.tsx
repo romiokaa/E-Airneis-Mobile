@@ -34,7 +34,6 @@ const RegisterForm: React.FC = () => {
       console.log('Registration successful', response.data);
       localStorage.setItem('user', JSON.stringify(response.data));
       
-      // Affichez une notification de succès
       Toast.show({
         type: 'success',
         text1: 'Inscription réussie !',
@@ -45,7 +44,6 @@ const RegisterForm: React.FC = () => {
     } catch (error: any) {
       console.error('Registration failed', error.response?.data || error.message);
       
-      // Affichez une notification d'erreur avec le message de l'erreur
       Toast.show({
         type: 'error',
         text1: error.response?.data.message || 'Une erreur est survenue',
@@ -58,7 +56,7 @@ const RegisterForm: React.FC = () => {
       <ToastContainer />
       <Text style={styles.title}>Inscription</Text>
       <View style={styles.form}>
-        {/* ... champs de saisie pour firstname, lastname, email, password ... */}
+        
         <TextInput
           style={styles.input}
           placeholder="Prénom"
